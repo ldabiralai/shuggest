@@ -7,7 +7,7 @@ var app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'));
 
-var mongouri = process.env.MONGOHQ_URL || 'mongodb://localhost/emoe'
+var mongouri = process.env.MONGOLAB_URI || 'mongodb://localhost'
 var store = require('promised-mongo')(mongouri).collection('store');
 
 
