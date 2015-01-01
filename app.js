@@ -7,7 +7,7 @@ var app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'));
 
-var mongouri = process.env.MONGOLAB_URI || 'mongodb://localhost'
+var mongouri = process.env.MONGOLAB_URI || 'mongodb://localhost/mastaf'
 var store = require('promised-mongo')(mongouri).collection('store');
 
 
@@ -16,13 +16,16 @@ app.get("/", function(req, res) {
 });
 
 app.post("/makeSuggestion", function(req, res) {
-	if (req.body.username && req.body.suggestion) store.insert(req.body);
+	if (req.body.username && req.body.suggestion) {
+		req.body.username = req.body.username.toLowerCase();
+		store.insert(req.body);
+	}	
     res.send(req.body);
 });
 
 
 app.get("/suggestions/:user", function(req, res) {
-	store.find({"username": req.params.user}).toArray(function(err, results){
+	store.find({"username": req.params.user.toLowerCase()}).toArray(function(err, results){
     	res.json(results);
     });    
 });
