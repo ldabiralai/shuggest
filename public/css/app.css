@@ -1,0 +1,36 @@
+body {
+	font-family: 'Raleway', sans-serif;
+}
+
+.suggestionResult {
+	display: none;
+	background-color: #7BC342 !important;
+	border-color: #7BC342 !important;
+}
+
+.suggestions {
+	display: none;
+	margin-bottom: 3em;
+}
+
+.make-a-suggestion-toggle {
+	text-align: center;
+	display: none;
+}
+
+.from-user {
+	position: absolute;
+	right: 0;
+	font-size: 12px;
+}
+
+.current-user {
+	font-size: 22px;
+}
+
+footer {
+	text-align: center;
+	position: absolute;
+	bottom: 0;
+	font-size: 12px;
+}

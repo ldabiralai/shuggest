@@ -1,0 +1,15 @@
+{
+  "name": "emoe",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.6.5",
+    "express": "*",
+    "promised-mongo": "^0.11.1",
+    "sugar": "*",
+    "compress": "*"
+  }
+}
