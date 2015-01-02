@@ -21,6 +21,10 @@
 				<option>other</option>
 			</select>	
 			<input id=suggestion type=text class="six columns" name="suggestion" placeholder="your suggestion">
+			<div class="row">
+				<input id=suggestion-url type=text class="twelve columns" name="url" placeholder="a url about your suggestion, e.g. imdb">
+			</div>
+			
 	        <input type=hidden name=from>
 	        <button class="btn send">send</button>
 			<button class="button-primary suggestionResult" disabled>thanks</button>
@@ -107,7 +111,8 @@
 				html += "<table class=u-full-width><thead><tr><th>"+category+"s</th></tr></thead><tbody>"
 				suggestions.findAll({category: category}).each(function(i){
 				   html += "<tr><td>"
-				   html += i.suggestion
+				   if (i.url) html += makeLink(i.suggestion, i.url)
+				   else html += i.suggestion
 				   if (i.from) html += " <span class=from-user>"+i.from+"</span>"
 				   html += "</td></tr>"
 				})
@@ -118,6 +123,11 @@
 			
 		return allhtml;
 	} 
+
+	function makeLink(text, href) {
+		if (!href.startsWith("http://")) href = href.insert("http://", 0)
+		return "<a href='"+href+"'>"+text+"</a>"
+	}
 
 	function toggleMakeASuggestion() {
 		if ($('.make-a-suggestion-toggle a').text() != 'hide') {
