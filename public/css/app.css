@@ -19,9 +19,7 @@ body {
 }
 
 .from-user {
-	position: absolute;
-	right: 0;
-	font-size: 12px;
+	font-size: 10px;
 }
 
 .current-user {
