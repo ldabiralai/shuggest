@@ -85,19 +85,21 @@
         });
 
         $('.logout').click(function(e){
-            console.log('boooo')
             e.preventDefault();
             logout();
         });
 
 
         $('body').on('click', '.more', function(e){
+            e.preventDefault();
             e.stopPropagation();
-            removeMoreBoxIfExists();
-            $(this).parent().append(makeMoreBox());
+            if ($('.more-box').length) 
+                removeMoreBox();
+             else 
+                $(this).parent().append(makeMoreBox());
         });
 
-        $('body').on('click', removeMoreBoxIfExists);
+        $('body').on('click', removeMoreBox);
 
         $('body').on('click', '.remove', function(e){
             e.preventDefault();
@@ -182,7 +184,7 @@
         $('.make-a-suggestion-toggle a').text('make a suggestion to a friend');
     }
 
-    function removeMoreBoxIfExists() {
+    function removeMoreBox() {
         if ($('.more-box').length) {
            $('.more-box').remove(); 
         } 
