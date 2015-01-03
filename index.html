@@ -13,20 +13,23 @@
         <form id=makeSuggestion>
 
             <input id=username type=text class="four columns" name="username" placeholder="friend's email">
-            <select name="category" class="two columns">
+            <select id="category" name="category" class="two columns">
                 <option>movie</option>
                 <option>show</option>
                 <option>book</option>
                 <option>game</option>
                 <option>other</option>
             </select>   
-            <input id=suggestion type=text class="six columns" name="suggestion" placeholder="your suggestion">
+            <span class="six columns suggestion-span">
+                <input id=suggestion type=text class="u-full-width" name="suggestion" placeholder="your suggestion" autocomplete="off">
+                <div class='imdb-search'></div>
+            </span>
             <div class="row">
                 <input id=suggestion-url type=url class="twelve columns" name="url" placeholder="a url about your suggestion, e.g. imdb">
             </div>
             
             <input type=hidden name=from>
-            <button class="btn send">send</button>
+            <button class="btn send" disabled>send</button>
             <button class="button-primary suggestionResult" disabled>thanks</button>
 
         </form>
@@ -57,6 +60,13 @@
             hideMakeASuggestion();
         }
 
+        $('#makeSuggestion input').blur(function(){
+            $('.send').prop('disabled', false);
+            if( $('#username').val().length && $('#sugestion').val().length) {
+                $('.send').prop('disabled', false);
+            }
+        })
+
         $('#makeSuggestion').submit(function(e){
             e.preventDefault();
             $('#makeSuggestion .send').hide();
@@ -69,6 +79,53 @@
                 refreshView();
             });
         });
+
+
+        $('#suggestion').keyup(function(e){
+            if ($(this).val().length < 1) {
+                $('.imdb-search').hide();
+                return;
+            }    
+            if (!($('#category').val() == 'movie' || $('#category').val() == 'show')) return;
+
+            var query = $(this).val().toLowerCase().replace(/ /g, '_');;
+            var firstLetter = query.substring(0,1);
+            var queryURL = 'http://sg.media-imdb.com/suggests/'+firstLetter+'/'+query+'.json'
+            
+            $.ajax({
+                url: queryURL,
+                dataType: 'jsonp',
+                jsonp: false,
+                jsonpCallback: 'imdb$'+query
+            })
+            .done(function(data){
+                console.log(data)
+                var html = ""
+                data.d.each(function(i){
+                    if ($('#category').val() == "movie" && i.q == "feature") {
+                        html += makeImdbResultLink(i);
+                    }
+                    if ($('#category').val() == "show" && i.q == "TV series") {
+                        html += makeImdbResultLink(i);
+                    }
+                })
+                html += ""
+                if (html) {
+                    $('.imdb-search').html(html);
+                    $('.imdb-search').slideDown("fast");
+                }    
+            })
+        });
+
+         $('body').on('click', '.imdb-query-result a', function(e){
+             e.preventDefault();
+             $('#suggestion').val($(this).parent().text())
+             $('#suggestion-url').val("http://www.imdb.com/title/"+$(this).data('id'))
+         });
+
+         $('body').on('click', function(e){
+             $('.imdb-search').hide();
+         });
 
 
         $('#viewSuggestions').submit(function(e){ 
@@ -113,6 +170,11 @@
 
 
     })
+
+
+
+
+
 
     function refreshView() {
         viewSuggestions();
@@ -197,6 +259,10 @@
     function logout() {
         localStorage.currentUser = "";
         location.reload();
+    }
+
+    function makeImdbResultLink(i){
+       return "<div class='imdb-query-result'><a href='#' data-id='"+i.id+"''>" + i.l +"</a> <span class=year> ("+i.y+")</span></div>"
     }
 
 

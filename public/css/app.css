@@ -2,6 +2,10 @@ body {
 	font-family: 'Raleway', sans-serif;
 }
 
+a {
+	color: pomegranate;
+}
+
 .suggestionResult {
 	display: none;
 	background-color: #7BC342 !important;
@@ -47,4 +51,32 @@ body {
 	display: none;
 	font-size: 12px;
 	padding-left: 5px;
+}
+
+.suggestion-span {
+	position: relative;
+}
+
+.imdb-search {
+	display: none;
+	border: 1px solid #AAA;
+	border-radius: 3px;
+	position: absolute;
+	top: 37px;
+	width: auto;
+	left: 0;
+	right: 0;
+	background-color: white;
+	padding: 8px;
+}
+
+.imdb-query-result {
+	border-bottom: 1px solid #fafafa;
+	padding: 5px 0;
+	line-height: 1.3;
+}
+
+.year {
+	color: #AAA;
+	font-size: 13px;
 }
