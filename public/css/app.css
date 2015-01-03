@@ -26,6 +26,23 @@ body {
 	font-size: 22px;
 }
 
+.more, .less {
+	color: #888;
+	text-decoration: none;
+	font-size: 20px;
+}
+
+.more-box {
+	background-color: #fafafa;
+	font-size: 12px;
+	position: absolute;
+	right:0;
+	width: 200px;
+	border: solid 1px #888;
+	border-radius: 3px;
+	padding: 15px;
+}
+
 footer {
 	text-align: center;
 	position: absolute;

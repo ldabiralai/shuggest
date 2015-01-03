@@ -8,7 +8,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'));
 
 var mongouri = process.env.MONGOLAB_URI || 'mongodb://localhost/mastaf'
-var store = require('promised-mongo')(mongouri).collection('store');
+var pmongo = require('promised-mongo')
+var store = pmongo(mongouri).collection('store');
 
 
 app.get("/", function(req, res) {
@@ -28,6 +29,13 @@ app.get("/suggestions/:user", function(req, res) {
 	store.find({"username": req.params.user.toLowerCase()}).toArray(function(err, results){
     	res.json(results);
     });    
+});
+
+app.post("/remove", function(req, res) {
+	store.remove({"_id" : pmongo.ObjectId(req.body.id)}, function(err, results) {
+		if (err) console.log(err);
+		res.json(results);
+	});
 });
 
 
