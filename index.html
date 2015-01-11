@@ -7,6 +7,15 @@
 </head> 
 <body>
 <div class="container">
+
+    <div id=login>
+        <h2>please login or signup</h2>
+        <form id=loginForm>
+            <input id=my-username type=text name="username" placeholder="your email">    
+            <button class="btn">go</button>
+        </form>
+    </div>    
+
     <div class="u-full-width make-a-suggestion-toggle"><a href="#">make a suggestion to a friend</a></div>
     <div id=make-a-suggestion>
         <h2>make a suggestion to a friend</h2>
@@ -36,15 +45,13 @@
     </div>
 
     <div id=my-suggestions>
-        <h2>see suggestions for you <span class=current-user></span></h2>
+        <h2>suggestions for you <span class=current-user></span></h2>
         <div class="suggestions u-full-width"></div>    
-        <form id=viewSuggestions>
-            <input id=my-username type=text name="username" placeholder="your email">    
-            <button class="btn">go</button>
-            <a href="#" class="logout">logout</a>
-        </form>
     </div>
     
+    <div>
+        <a href="#" class="logout">logout</a>
+    </div>
 </div>  
 
 
@@ -56,13 +63,23 @@
 
     $(function(){
         if (localStorage.currentUser){
+            $('.make-a-suggestion-toggle').show();
             viewSuggestions();
-            hideMakeASuggestion();
+        } else {
+            showLogin();
         }
+
+        $('#loginForm').submit(function(e){ 
+            e.preventDefault(); 
+            localStorage.currentUser = $('#my-username').val();
+            hideLogin();
+            $('.make-a-suggestion-toggle').show();
+            viewSuggestions(); 
+        });
 
         $('#makeSuggestion input').blur(function(){
             $('.send').prop('disabled', false);
-            if( $('#username').val().length && $('#sugestion').val().length) {
+            if( $('#username').val().length && $('#suggestion').val().length) {
                 $('.send').prop('disabled', false);
             }
         })
@@ -128,14 +145,6 @@
          });
 
 
-        $('#viewSuggestions').submit(function(e){ 
-            e.preventDefault(); 
-            localStorage.currentUser = $('#my-username').val();
-            viewSuggestions(); 
-            hideMakeASuggestion();
-        });
-
-
         $('.make-a-suggestion-toggle a').click(function(e){
             e.preventDefault();
             toggleMakeASuggestion();
@@ -180,8 +189,10 @@
         viewSuggestions();
     }
 
-    function viewSuggestions(){     
+    function viewSuggestions(){    
+        $("#my-suggestions").show(); 
         $.get("suggestions/"+localStorage.currentUser, function( data ) {
+
             $('.suggestions').html(renderSuggestions(data)).show();
 
             $('.current-user').text(localStorage.currentUser);
@@ -241,7 +252,6 @@
     }
 
     function hideMakeASuggestion() {
-        $('.make-a-suggestion-toggle').show();
         $('#make-a-suggestion').slideUp();  
         $('.make-a-suggestion-toggle a').text('make a suggestion to a friend');
     }
@@ -263,6 +273,14 @@
 
     function makeImdbResultLink(i){
        return "<div class='imdb-query-result'><a href='#' data-id='"+i.id+"''>" + i.l +"</a> <span class=year> ("+i.y+")</span></div>"
+    }
+
+    function showLogin() {
+        $('#login').show();
+    }
+
+    function hideLogin() {
+        $('#login').hide();
     }
 
 

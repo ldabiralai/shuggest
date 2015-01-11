@@ -1,6 +1,7 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 require('sugar')
+require('html-escape')
 
 
 var app = express()
@@ -18,7 +19,10 @@ app.get("/", function(req, res) {
 
 app.post("/makeSuggestion", function(req, res) {
 	if (req.body.username && req.body.suggestion) {
-		req.body.username = req.body.username.toLowerCase();
+		req.body.username = escape(req.body.username.toLowerCase());
+		req.body.suggestion = escape(req.body.suggestion);
+		req.body.url = escape(req.body.url);
+		req.body.from = escape(req.body.from);
 		store.insert(req.body);
 	}	
     res.send(req.body);

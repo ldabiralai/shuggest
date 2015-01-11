@@ -2,9 +2,10 @@ body {
 	font-family: 'Raleway', sans-serif;
 }
 
-a {
-	color: pomegranate;
+#login, #make-a-suggestion, #my-suggestions {
+	display: none;
 }
+
 
 .suggestionResult {
 	display: none;
