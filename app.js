@@ -1,7 +1,7 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 require('sugar')
-require('html-escape')
+var escape = require("html-escape");
 
 
 var app = express()
@@ -18,19 +18,21 @@ app.get("/", function(req, res) {
 });
 
 app.post("/makeSuggestion", function(req, res) {
-	if (req.body.username && req.body.suggestion) {
-		req.body.username = escape(req.body.username.toLowerCase());
+	if (req.body.fbid && req.body.suggestion) {
+		req.body.fbid = escape(req.body.fbid);
+		req.body.fbname = escape(req.body.fbname);
 		req.body.suggestion = escape(req.body.suggestion);
 		req.body.url = escape(req.body.url);
-		req.body.from = escape(req.body.from);
+		req.body.fromfbid = escape(req.body.fromfbid);
+		req.body.fromfbname = escape(req.body.fromfbname);
 		store.insert(req.body);
 	}	
     res.send(req.body);
 });
 
 
-app.get("/suggestions/:user", function(req, res) {
-	store.find({"username": req.params.user.toLowerCase()}).toArray(function(err, results){
+app.get("/suggestions/:fbid", function(req, res) {
+	store.find({"fbid": req.params.fbid}).toArray(function(err, results){
     	res.json(results);
     });    
 });

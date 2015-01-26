@@ -80,3 +80,15 @@ body {
 	color: #AAA;
 	font-size: 13px;
 }
+
+.placeholder {
+	display: none;
+}
+
+.select-with-placeholder {
+	color: #888;
+}
+
+.invite-link {
+	margin-bottom: 25px;
+}
