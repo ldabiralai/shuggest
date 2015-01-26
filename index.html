@@ -41,7 +41,7 @@
                 <select id=fbname type=text class="six columns select-with-placeholder" name="fbname">
                     <option disabled selected class=placeholder>friend</option>
                 </select>    
-                <input type=text name=fbid>
+                <input type=hidden name=fbid>
                 <div class="four columns invite-link"> <a href="#" class="invite-fb-friend">invite facebook friend</a></div>
             </div>
 
@@ -215,8 +215,8 @@
                     addToFriendList(friend);
                 }) 
             } else {
-                // $('#fbname').hide();
-                // $('#send-button').hide();
+                $('#fbname').hide();
+                $('#send-button').hide();
             } 
 
         })
@@ -330,9 +330,8 @@
     function logout() {
         localStorage.currentUser = "";
         FB.logout(function(response) {
-       
+            determineLogin();
         });
-        determineLogin();
     }
 
     function makeImdbResultLink(i){
