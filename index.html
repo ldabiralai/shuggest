@@ -10,7 +10,7 @@
 
     <div id=login>
         <h2>make a suggestion to a friend</h2>
-        <fb:login-button size="xlarge" scope="public_profile,email,user_friends" onlogin="determineLogin()">Log in with Facebook
+        <fb:login-button size="xlarge" scope="public_profile,email,user_friends" onlogin="FB.getLoginStatus(handleFBLoginStatus)">Log in with Facebook
         </fb:login-button>
     </div>    
 
@@ -80,7 +80,7 @@
 
     $(function(){
 
-        determineLogin();
+        FB.getLoginStatus(handleFBLoginStatus);
 
 
         $('#makeSuggestion input').blur(function(){
@@ -208,6 +208,7 @@
       if (response.status == 'connected') {
         FB.api('/me', function(response) {
             localStorage.currentUser = JSON.stringify(response);
+            determineLogin();
         }); 
         FB.api('/me/friends', function(response) {
             if(response.data.length > 0) {
@@ -220,11 +221,12 @@
             } 
 
         })
+      } else {
+        determineLogin();
       }
     }
 
     function determineLogin() {   
-        FB.getLoginStatus(handleFBLoginStatus);
         if (localStorage.currentUser){
             showLoggedIn(); 
             hideLogin();
