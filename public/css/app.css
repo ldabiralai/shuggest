@@ -1,9 +1,27 @@
 body {
 	font-family: 'Raleway', sans-serif;
+	background-color: #fdfdfd;
 }
 
 #login, #make-a-suggestion, #my-suggestions {
 	display: none;
+}
+
+#login {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.login-button {
+	background-color: #3b5998 !important;
+	border-color: #3b5998 !important;
+}
+
+.login-button:hover {
+	background-color: #8b9dc3 !important;
+	border-color: #8b9dc3 !important;
 }
 
 
@@ -21,6 +39,7 @@ body {
 .make-a-suggestion-toggle {
 	text-align: center;
 	display: none;
+	margin-bottom: 10px;
 }
 
 .from-user {

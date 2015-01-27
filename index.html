@@ -9,9 +9,8 @@
 <div class="container">
 
     <div id=login>
-        <h2>make a suggestion to a friend</h2>
-        <fb:login-button size="xlarge" scope="public_profile,email,user_friends" onlogin="FB.getLoginStatus(handleFBLoginStatus)">Log in with Facebook
-        </fb:login-button>
+        <h1>shuggest</h1>
+        <button id=facebook-login class="button-primary login-button">login with facebook</button>
     </div>    
 
     <div class="u-full-width make-a-suggestion-toggle"><a href="#">make a suggestion to a friend</a></div>
@@ -70,17 +69,23 @@
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="/js/sugar.min.js"></script>
 <script>
-    FB.init({
-      appId      : '1555610558025917',
-      xfbml      : true,
-      version    : 'v2.2'
-    });
-</script>
-<script>
 
     $(function(){
+        determineLogin();
+        
+        FB.init({
+          appId      : '1555610558025917',
+          xfbml      : true,
+          version    : 'v2.2'
+        });
 
         FB.getLoginStatus(handleFBLoginStatus);
+
+
+        $('#facebook-login').click(function(e){
+            e.preventDefault();
+            FB.login(handleFBLoginStatus, {scope: 'public_profile,email,user_friends'});
+        })
 
 
         $('#makeSuggestion input').blur(function(){
