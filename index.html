@@ -40,7 +40,7 @@
                         </span>
                     </div>    
 
-                    <div class="row hidden">
+                    <div class="row hidden suggestion-url-row">
                         <input id=suggestion-url type=url class="twelve columns" name="url" placeholder="a url about your suggestion, e.g. imdb">
                     </div>
 
@@ -57,10 +57,9 @@
                         <input type=hidden name=fromfbid>
                         <button id=send-button class="btn send">send</button>
                     </div>
-
+                    <p class="friend-invite"> <a href="#" class="invite-fb-friend">Invite Facebook friends</a></p>
                 </form>
             </div>
-
             <div id=my-suggestions>
                 <h3>suggestions for you</h3>
                 <div class="suggestions u-full-width"></div>    
@@ -82,8 +81,8 @@
         determineLogin();
 
         FB.init({
-          appId      : '1555610558025917',
-          //appId: '1571831196403853',
+          //appId      : '1555610558025917',
+          appId: '1571831196403853',
           xfbml      : true,
           version    : 'v2.2'
         });
@@ -99,6 +98,7 @@
 
         $('#category').change(function(e){
             $('.suggestion-row').removeClass('hidden');
+            $('.suggestion-url-row').removeClass('hidden');
         })
 
         $('#suggestion').change(function(e){
@@ -128,7 +128,7 @@
             $.post("makeSuggestion", $(this).serialize() , function( data ) {
                 $('#makeSuggestion .send').prop('disabled', true).addClass('suggestionResult').text('THANKS!');
                 setTimeout(function(e) {
-                    $('.suggestion-row, .fbname-row, .send-row').addClass('hidden');
+                    $('.suggestion-row, .suggestion-url-row, .fbname-row, .send-row').addClass('hidden');
                     $('#makeSuggestion input').val('');
                     $('#makeSuggestion select').val('');
                     $('#makeSuggestion .send').prop('disabled', false).removeClass('suggestionResult').text('send');
@@ -234,7 +234,7 @@
                         addToFriendList(friend);
                     }) 
                 } else {
-                     $('#makeSuggestion').html('<p>None of your friends use shuggest.</p><p> <a href="#" class="invite-fb-friend">Invite Facebook friends</a></p>')
+                     $('.friend-invite').prepend('None of your Facebook friends use shuggest. <br>')
                 } 
                 determineLogin(); 
             })  
