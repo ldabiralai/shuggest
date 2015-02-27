@@ -48,7 +48,7 @@
                         <select id=fbname type=text class="twelve columns select-with-placeholder" name="fbname">
                             <option disabled selected class=placeholder>friend</option>
                         </select>    
-                        <input type=text id=fbid name=fbid value="10153150729614050 ">
+                        <input type=hidden id=fbid name=fbid>
                         
                     </div>
 
@@ -82,8 +82,8 @@
         determineLogin();
 
         FB.init({
-         // appId      : '1555610558025917',
-          appId: '1571831196403853',
+          appId      : '1555610558025917',
+          //appId: '1571831196403853',
           xfbml      : true,
           version    : 'v2.2'
         });
@@ -234,7 +234,7 @@
                         addToFriendList(friend);
                     }) 
                 } else {
-                    // $('#makeSuggestion').html('<p>None of your friends use shuggest.</p><p> <a href="#" class="invite-fb-friend">Invite Facebook friends</a></p>')
+                     $('#makeSuggestion').html('<p>None of your friends use shuggest.</p><p> <a href="#" class="invite-fb-friend">Invite Facebook friends</a></p>')
                 } 
                 determineLogin(); 
             })  
