@@ -6,75 +6,84 @@
     <link rel="stylesheet" href="/css/app.css">
 </head> 
 <body>
-<div class="container">
 
     <div id=login>
         <h1>shuggest</h1>
         <button id=facebook-login class="button-primary login-button">login with facebook</button>
-    </div>    
+    </div> 
 
-    <div class="u-full-width make-a-suggestion-toggle"><a href="#">make a suggestion to a friend</a></div>
-    <div id=make-a-suggestion>
-        <h2>make a suggestion to a friend</h2>
-        <form id=makeSuggestion>
+    <div id=loggedIn>
+        <header>
+            <div class="logo" />
+            <div class="user"><a href="#" class="logout">logout</a></div>
+        </header>    
+        <div class="container">
 
-            <div class="row">
-                <select id="category" name="category" class="two columns">
-                    <option>movie</option>
-                    <option>show</option>
-                    <option>book</option>
-                    <option>game</option>
-                    <option>other</option>
-                </select>   
-                <span class="six columns suggestion-span">
-                    <input id=suggestion type=text class="u-full-width" name="suggestion" placeholder="your suggestion" autocomplete="off">
-                    <div class='imdb-search'></div>
-                </span>
-            </div>    
+            <div id=make-a-suggestion>
+                <form id=makeSuggestion>
+                    <div class="row">
+                        <label class="u-full-width category-label" >I want to suggest a
+                            <select id="category" name="category" class="category-select">
+                                <option disabled selected></option>
+                                <option>movie</option>
+                                <option>show</option>
+                                <option>book</option>
+                                <option>game</option>
+                                <option>other</option>
+                            </select> 
+                        </label> 
+                    </div> 
+                    <div class="row hidden suggestion-row">
+                        <span class="twelve columns suggestion-span">
+                            <input id=suggestion type=text class="u-full-width" name="suggestion" placeholder="your suggestion" autocomplete="off">
+                            <div class='imdb-search'></div>
+                        </span>
+                    </div>    
 
-            <div class="row">
-                <input id=suggestion-url type=url class="twelve columns" name="url" placeholder="a url about your suggestion, e.g. imdb">
+                    <div class="row hidden">
+                        <input id=suggestion-url type=url class="twelve columns" name="url" placeholder="a url about your suggestion, e.g. imdb">
+                    </div>
+
+                    <div class="row hidden fbname-row">
+                        <select id=fbname type=text class="twelve columns select-with-placeholder" name="fbname">
+                            <option disabled selected class=placeholder>friend</option>
+                        </select>    
+                        <input type=text id=fbid name=fbid value="10153150729614050 ">
+                        
+                    </div>
+
+                    <div class="row hidden send-row">
+                        <input type=hidden name=fromfbname>
+                        <input type=hidden name=fromfbid>
+                        <button id=send-button class="btn send">send</button>
+                    </div>
+
+                </form>
             </div>
 
-            <div class="row">
-                <select id=fbname type=text class="six columns select-with-placeholder" name="fbname">
-                    <option disabled selected class=placeholder>friend</option>
-                </select>    
-                <input type=hidden name=fbid>
-                <div class="four columns invite-link"> <a href="#" class="invite-fb-friend">invite facebook friend</a></div>
+            <div id=my-suggestions>
+                <h3>suggestions for you</h3>
+                <div class="suggestions u-full-width"></div>    
             </div>
 
-            <div class="row">
-                <input type=hidden name=fromfbname>
-                <input type=hidden name=fromfbid>
-                <button id=send-button class="btn send" disabled>send</button>
-                <button class="button-primary suggestionResult" disabled>thanks</button>
-            </div>
-
-        </form>
-    </div>
-
-    <div id=my-suggestions>
-        <h2>suggestions for you <span class=current-user></span> <a href="#" class="logout">logout</a></h2>
-        <div class="suggestions u-full-width"></div>    
-    </div>
-
-</div>  
-<div id="status">
-</div>
-
+        </div>  
+   </div>     
 </body> 
 
 <script id="facebook-jssdk" src="//connect.facebook.net/en_US/sdk.js"></script>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="/js/sugar.min.js"></script>
 <script>
 
-    $(function(){
+    
+    $(function(){  
+
         determineLogin();
-        
+
         FB.init({
-          appId      : '1555610558025917',
+         // appId      : '1555610558025917',
+          appId: '1571831196403853',
           xfbml      : true,
           version    : 'v2.2'
         });
@@ -88,21 +97,43 @@
         })
 
 
-        $('#makeSuggestion input').blur(function(){
-            $('.send').prop('disabled', false);
+        $('#category').change(function(e){
+            $('.suggestion-row').removeClass('hidden');
         })
+
+        $('#suggestion').change(function(e){
+            $('.fbname-row').removeClass('hidden');
+        })
+
+
+        $('#fbname').change(function(e){
+            $('.send-row').removeClass('hidden');
+        })
+
+        $('#fbname').change(function(){
+           $('#fbname').removeClass('select-with-placeholder');
+           $('input[name=fbid]').val($("#fbname option:selected").data('fbid'))
+        })
+
+ $('#fbid').change(function(e){
+            $('.send-row').removeClass('hidden');
+        })
+
 
         $('#makeSuggestion').submit(function(e){
             e.preventDefault();
-            $('#makeSuggestion .send').hide();
+            $('#makeSuggestion .send').text('sending...');
             $('#makeSuggestion input[name=fromfbname]').val(currentUser().name)
             $('#makeSuggestion input[name=fromfbid]').val(currentUser().id)
             $.post("makeSuggestion", $(this).serialize() , function( data ) {
-                $('.suggestionResult').show();  
-                $('#makeSuggestion input').val('');
-                $('#makeSuggestion .send').delay(3000).slideDown("fast");   
-                $('.suggestionResult').delay(2500).slideUp("fast"); 
-                refreshView();
+                $('#makeSuggestion .send').prop('disabled', true).addClass('suggestionResult').text('THANKS!');
+                setTimeout(function(e) {
+                    $('.suggestion-row, .fbname-row, .send-row').addClass('hidden');
+                    $('#makeSuggestion input').val('');
+                    $('#makeSuggestion select').val('');
+                    $('#makeSuggestion .send').prop('disabled', false).removeClass('suggestionResult').text('send');
+                    refreshView();
+                }, 3000)
             });
         });
 
@@ -154,20 +185,15 @@
          });
 
 
-        $('.make-a-suggestion-toggle a').click(function(e){
-            e.preventDefault();
-            toggleMakeASuggestion();
-        });
-
         $('.logout').click(function(e){
             e.preventDefault();
             logout();
         });
 
-        $('.invite-fb-friend').click(function(e){
+        $('body').on('click', '.invite-fb-friend', function(e){
             e.preventDefault();
             FB.ui({method: 'apprequests',
-                  message: "Hi, I want to suggest a " + $('#category').val() + " to you. Login at http://mastaf.herokuapp.com to see what it is."
+                  message: "Hi, I want to suggest a thing to you on shuggest.com. Login at http://shuggest.com then we can share suggestions."
                 }, function(response){
                     $('#fbid').val(response.to[0])
             });
@@ -195,44 +221,42 @@
             
         });
 
-        $('#fbname').change(function(){
-           $('#fbname').removeClass('select-with-placeholder');
-           $('input[name=fbid]').val($("#fbname option:selected").data('fbid'))
-        })
-
-
-
     })
 
-
-    function currentUser() {
-        return JSON.parse(localStorage.currentUser);
-    }
 
     function handleFBLoginStatus(response) {
       if (response.status == 'connected') {
         FB.api('/me', function(response) {
-            localStorage.currentUser = JSON.stringify(response);
-            determineLogin();
-        }); 
-        FB.api('/me/friends', function(response) {
-            if(response.data.length > 0) {
-                response.data.each(function(friend){
-                    addToFriendList(friend);
-                }) 
-            } else {
-                $('#fbname').hide();
-                $('#send-button').hide();
-            } 
+            setCurrentUser(response);
+             FB.api('/me/friends', function(response) {
+                if (response.data.length > 0) {
+                    response.data.each(function(friend){
+                        addToFriendList(friend);
+                    }) 
+                } else {
+                    // $('#makeSuggestion').html('<p>None of your friends use shuggest.</p><p> <a href="#" class="invite-fb-friend">Invite Facebook friends</a></p>')
+                } 
+                determineLogin(); 
+            })  
 
-        })
-      } else {
-        determineLogin();
-      }
+        }); 
+
+      }  
+    }
+
+    function currentUser() {
+        var currentUserValue = $.cookie('currentUser');
+        if (currentUserValue) {
+         return JSON.parse(currentUserValue)
+        }   
+    }
+
+    function setCurrentUser(userData) {
+        $.cookie('currentUser', JSON.stringify(userData));  
     }
 
     function determineLogin() {   
-        if (localStorage.currentUser){
+        if (currentUser()){
             showLoggedIn(); 
             hideLogin();
         } else {
@@ -247,13 +271,12 @@
     }
 
     function showLoggedIn() {
-         $('.make-a-suggestion-toggle').show();
+         $('#loggedIn').show();
          viewSuggestions();
     }
 
     function hideLoggedIn() {
-         $('.make-a-suggestion-toggle').hide();
-         $("#my-suggestions").hide(); 
+         $('#loggedIn').hide();   
     }
 
 
@@ -261,15 +284,11 @@
         viewSuggestions();
     }
 
-    function viewSuggestions(){    
-        $("#my-suggestions").show(); 
+    function viewSuggestions(){     
         $.get("suggestions/"+currentUser().id, function( data ) {
-
-            $('.suggestions').html(renderSuggestions(data)).show();
+            $('.suggestions').html(renderSuggestions(data));
         
         });
-
-         $('.current-user').text(currentUser().name);
     }
 
     function renderSuggestions(suggestions) {
@@ -305,24 +324,6 @@
         return "<a href='"+href+"'>"+text+"</a>"
     }
 
-    function toggleMakeASuggestion() {
-        if ($('.make-a-suggestion-toggle a').text() != 'hide') {
-            showMakeASuggestion();
-        }
-        else {
-            hideMakeASuggestion();
-        }   
-    }
-
-    function showMakeASuggestion() {
-        $('.make-a-suggestion-toggle a').text('hide')
-        $('#make-a-suggestion').slideDown();    
-    }
-
-    function hideMakeASuggestion() {
-        $('#make-a-suggestion').slideUp();  
-        $('.make-a-suggestion-toggle a').text('make a suggestion to a friend');
-    }
 
     function removeMoreBox() {
         if ($('.more-box').length) {
@@ -335,7 +336,7 @@
     }
 
     function logout() {
-        localStorage.currentUser = "";
+        $.removeCookie('currentUser');
         FB.logout(function(response) {
             determineLogin();
         });

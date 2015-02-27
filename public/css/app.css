@@ -3,7 +3,7 @@ body {
 	background-color: #fdfdfd;
 }
 
-#login, #make-a-suggestion, #my-suggestions {
+#login, #loggedIn {
 	display: none;
 }
 
@@ -13,6 +13,10 @@ body {
 	left: 50%;
 	margin-left: -105px;
 	margin-top: -64px;
+}
+
+.hidden {
+	display: none;
 }
 
 .login-button {
@@ -27,28 +31,16 @@ body {
 
 
 .suggestionResult {
-	display: none;
 	background-color: #7BC342 !important;
 	border-color: #7BC342 !important;
 }
 
 .suggestions {
-	display: none;
 	margin-bottom: 3em;
-}
-
-.make-a-suggestion-toggle {
-	text-align: center;
-	display: none;
-	margin-bottom: 10px;
 }
 
 .from-user {
 	font-size: 10px;
-}
-
-.current-user {
-	font-size: 22px;
 }
 
 .more, .less {
@@ -112,3 +104,27 @@ body {
 .invite-link {
 	margin-bottom: 25px;
 }
+
+header {
+	margin-bottom: 20px;
+}
+
+.logo {
+	height: 50px;
+	background: url(/images/logo.jpg) no-repeat 12 8;
+}
+
+.user {
+	float: right;
+	padding: 15px 12px 0 0;
+}
+
+label.category-label {
+	font-weight: 400;
+	font-size: medium;
+}
+
+.category-select {
+	margin-left: 3px;
+}
+
