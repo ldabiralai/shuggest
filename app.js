@@ -2,6 +2,7 @@ var express = require('express')
 var bodyParser = require('body-parser')
 require('sugar')
 var escape = require("html-escape");
+var request = require('request');
 
 
 var app = express()
@@ -27,6 +28,10 @@ app.post("/makeSuggestion", function(req, res) {
 		req.body.fromfbname = escape(req.body.fromfbname);
 		store.insert(req.body);
 	}	
+    request.post('http://shuggest-notifications.herokuapp.com/', req.body , function(a,b) {
+      console.log(a);
+      console.log(b);
+    });
     res.send(req.body);
 });
 
