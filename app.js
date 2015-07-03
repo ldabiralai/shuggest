@@ -28,7 +28,11 @@ app.post("/makeSuggestion", function(req, res) {
 		req.body.fromfbname = escape(req.body.fromfbname);
 		store.insert(req.body);
 	}	
-    request.post('http://shuggest-notifications.herokuapp.com/', req.body , function(a,b) {
+    request({
+    	url: 'http://shuggest-notifications.herokuapp.com/',
+    	method: "POST", 
+    	json: req.body 
+    }, function(a,b) {
       console.log(a);
       console.log(b);
     });
